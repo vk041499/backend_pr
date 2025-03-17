@@ -163,8 +163,8 @@ const logoutUser = asyncHandler(async (req,res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set: {
-                refreshToken: undefined
+            $unset: {
+                refreshToken: 1 // this removes the field from document
             }
         },
         {
@@ -361,7 +361,7 @@ const getUserChannelProfile = asyncHandler(async (req,res)=>{
         {
             $lookup: {
                 from: "subscriptions",
-                localField:_id,
+                localField:"_id",
                 foreignField:"channel",
                 as:"subscribers"
             }
@@ -369,7 +369,7 @@ const getUserChannelProfile = asyncHandler(async (req,res)=>{
         {
             $lookup: {
                 from: "subscriptions",
-                localField:_id,
+                localField:"_id",
                 foreignField:"subscriber",
                 as:"subscribedTo"
             }
